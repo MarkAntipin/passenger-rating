@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "passenger-rating"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+python-dotenv = "^0.18.0"
+SQLAlchemy = "^1.4.19"
+fastapi = "^0.65.2"
+uvicorn = "^0.14.0"
+psycopg2 = "^2.9.1"
+
+[tool.poetry.dev-dependencies]
+pycycle = "^0.0.8"
+flake8-import-order = "^0.18.1"
+flake8-bugbear = "^21.4.3"
+flake8 = "^3.9.2"
+flake8-eradicate = "^1.1.0"
+flake8-builtins = "^1.5.3"
+flake8-comprehensions = "^3.5.0"
+flake8-broken-line = "^0.3.0"
+flake8-print = "^4.0.0"
+pep8-naming = "^0.11.1"
+xenon = "^0.7.3"
+flake8-unused-arguments = "^0.0.6"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
