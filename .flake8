@@ -1,0 +1,14 @@
+[flake8]
+ignore = D203, B305, A003, B008
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    env,
+    tests,
+    settings/env,
+max-complexity = 10
+max-line-length = 120
+import-order-style = pep8
+application-import-names = settings,utils,models,app
+format = '%(path)s:%(row)d Column:%(col)d: %(code)s %(text)s'

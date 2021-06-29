@@ -27,7 +27,7 @@ def add_rating(
     response_model=GetRatingResponse,
     status_code=status.HTTP_200_OK
 )
-def get2_rating(
+def get_rating(
     client_id: int = Path(..., alias='clientId'),
     conn: Connection = Depends(get_db_conn)
 ):
