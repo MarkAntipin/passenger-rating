@@ -1,12 +1,15 @@
 from datetime import datetime as dt
+from typing import List
 
 from sqlalchemy import (
     Table, MetaData, Column, create_engine,
     Integer, DateTime, Float
 )
 from sqlalchemy.engine import Connection
+from sqlalchemy.engine.cursor import CursorResult
 
 from settings import settings
+
 
 metadata = MetaData()
 
@@ -47,3 +50,17 @@ def generate_schemas():
 def get_db_conn() -> Connection:
     with engine.begin() as conn:
         yield conn
+
+
+def get_rating_from_cursor(c: CursorResult) -> [dict, None]:
+    r = c.fetchone()
+    if not r:
+        return
+    return dict(r)
+
+
+def get_list_rating_from_cursor(c: CursorResult) -> [List[dict], None]:
+    r = c.fetchall()
+    if not r:
+        return
+    return [dict(_) for _ in r]
