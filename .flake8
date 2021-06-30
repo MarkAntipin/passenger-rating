@@ -10,5 +10,5 @@ exclude =
 max-complexity = 10
 max-line-length = 120
 import-order-style = pep8
-application-import-names = settings,utils,models,app
+application-import-names = settings,utils,models,app,my_rabbit,core
 format = '%(path)s:%(row)d Column:%(col)d: %(code)s %(text)s'

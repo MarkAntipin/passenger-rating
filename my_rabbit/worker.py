@@ -1,4 +1,5 @@
 import logging
+import traceback
 from abc import ABC, abstractmethod
 
 import pika
@@ -130,6 +131,7 @@ class Worker(ABC):
             self.perform(current_message)
         except Exception as e:
             trace = repr(e)
+            trace += ''.join(traceback.format_tb(e.__traceback__))
             logger.error(
                 f'{trace}; worker: {self.name}; queue: {self.queue}'
             )
@@ -137,8 +139,8 @@ class Worker(ABC):
 
         self.channel.basic_ack(delivery_tag=delivery_tag)
 
-    @abstractmethod  # noqa
-    def perform(self, message: Message):
+    @abstractmethod
+    def perform(self, message: Message):  # noqa U100
         """Perform worker logic
         """
 

@@ -3,6 +3,7 @@ import logging
 from enum import IntEnum, unique
 
 import pika
+import aio_pika
 from pika.adapters.blocking_connection import BlockingChannel
 
 
@@ -60,6 +61,23 @@ class Message:
                 delivery_mode=DeliveryMode.PERSISTENT,
                 content_type=content_type
             ))
+
+    async def async_publish(self, channel: aio_pika.Channel, queue: str, content_type: str = 'application/json'):
+        """Publish message in queue but within async framework (thread save)
+
+        :param AsyncChannel channel: Channel for rabbit connection
+        :param str queue: Queue to publish in
+        :param str content_type: Content type of message body
+        """
+        await channel.default_exchange.publish(
+            routing_key=queue,
+            message=aio_pika.Message(
+                body=self.message_body,
+                headers=self.properties,
+                delivery_mode=DeliveryMode.PERSISTENT,
+                content_type=content_type
+            ),
+        )
 
     def requeue(self, channel: BlockingChannel, dq_queue: str, xq_queue: str):
         """Requeue message. Put it in dq and restarts every RETRY_TIME
