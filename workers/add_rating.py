@@ -15,8 +15,8 @@ def add_rating_log(payload: dict, conn):
 def get_all_client_rating(client_id: str, conn):
     curr = conn.execute(
         rating_log.select()
-            .where(rating_log.c.client_id == client_id)
-            .with_only_columns([rating_log.c.driver_id, rating_log.c.rating])
+        .where(rating_log.c.client_id == client_id)
+        .with_only_columns([rating_log.c.driver_id, rating_log.c.rating])
     )
 
     res = get_list_rating_from_cursor(curr)
