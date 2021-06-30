@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    restart: always
+    environment:
+      POSTGRES_USER: passenger-rating
+      POSTGRES_PASSWORD: passenger-rating
+      POSTGRES_DB: passenger-rating
+    networks:
+      - network-passenger-rating
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      RABBITMQ_USER: passenger-rating
+      RABBITMQ_PASSWORD: passenger-rating
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - rabbitmq-passenger-rating
+
+  passenger-rating:
+    build: .
+    command: ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1"]
+    environment:
+      PG_PORT: 5432
+      PG_HOST: postgres
+      PG_USER: passenger-rating
+      PG_DATABASE: passenger-rating
+      PG_PASSWORD: passenger-rating
+
+      RABBITMQ_USER: passenger-rating
+      RABBITMQ_PASSWORD: passenger-rating
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    depends_on:
+      - postgres
+      - rabbitmq
+    restart: always
+    networks:
+      - network-passenger-rating
+    ports:
+      - 8080:8080
+
+volumes:
+  postgres_data:
+
+networks:
+  network-passenger-rating:
+  rabbitmq-passenger-rating:
