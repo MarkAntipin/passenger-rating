@@ -14,7 +14,7 @@ rating = Table(
     'rating',
     metadata,
     Column('id', Integer, primary_key=True, autoincrement=True, index=True),
-    Column('client_id', Integer, index=True),
+    Column('client_id', Integer, index=True, unique=True),
     Column('rating', Float, default=None, nullable=True),
 
     Column('created_at', DateTime, default=dt.utcnow),

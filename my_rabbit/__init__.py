@@ -7,12 +7,21 @@
 
 from .worker import Worker
 from .message import Message
-from .connection import get_connection, ConnectionType
+from .connection import (
+    get_connection, get_async_connection, ConnectionType, pop_connection, ConnectionSyncType
+)
+from .config import set_config, get_config, RabbitConfig
 
 
 __all__ = [
     'Worker',
     'Message',
     'get_connection',
+    'get_async_connection',
+    'pop_connection',
     'ConnectionType',
+    'ConnectionSyncType',
+    'set_config',
+    'get_config',
+    'RabbitConfig'
 ]

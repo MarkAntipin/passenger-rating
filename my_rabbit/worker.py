@@ -137,8 +137,8 @@ class Worker(ABC):
 
         self.channel.basic_ack(delivery_tag=delivery_tag)
 
-    @abstractmethod  # noqa
-    def perform(self, message: Message):
+    @abstractmethod
+    def perform(self, message: Message):  # noqa U100
         """Perform worker logic
         """
 
