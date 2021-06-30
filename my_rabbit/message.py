@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-MAX_RETRIES = 5
+MAX_RETRIES = 3
 
 
 @unique
@@ -28,8 +28,7 @@ class Message:
             delivery_tag: str = None,
     ):
         self._payload = payload
-        self._properties = properties or {}
-        self._properties.update({'current_retries': 0})
+        self._properties = properties or {'current_retries': 0}
 
         self._max_retries = max_retries
         self._delivery_tag = delivery_tag
@@ -76,12 +75,12 @@ class Message:
             return
         self.incr_current_retries()
         logger.info(
-            f"Retrying message; current_retries: {self.properties['current_retries']}",
+            f"Retrying message; current_retries: {self.current_retries}",
         )
         self.publish(channel=channel, queue=dq_queue)
 
     def drop(self, channel: BlockingChannel, xq_queue: str, traceback: str = None):
-        """Put message in xq wher it will be stored for DEAD_MESSAGE_TTL
+        """Put message in xq where it will be stored for DEAD_MESSAGE_TTL
 
         :param BlockingChannel channel: Channel for rabbit connection
         :param str xq_queue: Queue to store dead messages
@@ -131,8 +130,7 @@ class Message:
     def message_body(self) -> bytes:
         """Dumps message payload into bytes
         """
-        body_dict = {'payload': self.payload, 'properties': self.properties}
-        return json.dumps(body_dict).encode()
+        return json.dumps(self.payload,).encode()
 
     @property
     def properties(self):
@@ -149,7 +147,7 @@ class Message:
     def incr_current_retries(self):
         """Incr on one current message retries
         """
-        self.properties['current_retries'] += 1
+        self._properties['current_retries'] += 1
 
     @classmethod
     def from_bytes(

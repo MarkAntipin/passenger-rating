@@ -6,6 +6,7 @@ from my_rabbit import (
 class AddRating(Worker):
     def perform(self, message: Message):
         print('!' * 100)
+        # print(self.current_message.properties)
         print('a' + 1)
         print('!' * 100)
 
