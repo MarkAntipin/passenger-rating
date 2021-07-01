@@ -24,6 +24,27 @@ services:
     networks:
       - rabbitmq-passenger-rating
 
+  add-rating-worker:
+    build: .
+    command: [ "python", "run_worker.py"]
+    environment:
+      PG_PORT: 5432
+      PG_HOST: postgres
+      PG_USER: passenger-rating
+      PG_DATABASE: passenger-rating
+      PG_PASSWORD: passenger-rating
+
+      RABBITMQ_USER: passenger-rating
+      RABBITMQ_PASSWORD: passenger-rating
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      depends_on:
+        - postgres
+        - rabbitmq
+      restart: always
+      networks:
+        - network-passenger-rating
+
   passenger-rating:
     build: .
     command: ["uvicorn", "run:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1"]

@@ -30,6 +30,8 @@ class Message:
     ):
         self._payload = payload
         self._properties = properties or {'current_retries': 0}
+        if 'current_retries' not in self._properties:
+            self._properties['current_retries'] = 0
 
         self._max_retries = max_retries
         self._delivery_tag = delivery_tag
@@ -141,14 +143,13 @@ class Message:
     def _payload_from_body(body: bytes) -> dict:
         """Load message payload from bytes
         """
-        payload = json.loads(body)
-        return payload
+        return json.loads(body)
 
     @property
     def message_body(self) -> bytes:
         """Dumps message payload into bytes
         """
-        return json.dumps(self.payload,).encode()
+        return json.dumps(self.payload).encode()
 
     @property
     def properties(self):
@@ -162,6 +163,12 @@ class Message:
         """
         return self.properties['current_retries']
 
+    @property
+    def max_retries(self):
+        """Message max retries; how many times this message will be retried
+        """
+        return self._max_retries
+
     def incr_current_retries(self):
         """Incr on one current message retries
         """
@@ -170,7 +177,7 @@ class Message:
     @classmethod
     def from_bytes(
             cls,
-            body: bytes,
+            body: [bytes, str],
             properties: dict = None,
             max_retries: int = MAX_RETRIES,
             delivery_tag: str = None
