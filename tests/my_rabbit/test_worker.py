@@ -9,27 +9,23 @@ class _MockMethod:
     delivery_tag = 1
 
 
-class TestWorker(Worker):
+class _TestWorker(Worker):
     def perform(self, message: Message):
         ...
 
 
-class TestWorkerError(Worker):
+class _TestWorkerError(Worker):
     def perform(self, message: Message):
         raise Exception('error')
 
 
-def _create_worker(connection):
-    return TestWorker(connection=connection)
-
-
 def test_init(connection):
-    w = _create_worker(connection=connection)
+    w = _TestWorker(connection=connection)
 
-    assert w.queue == 'TestWorker'
-    assert w.name == 'TestWorker'
-    assert w.xq_queue == 'TestWorker.XQ'
-    assert w.dq_queue == 'TestWorker.DQ'
+    assert w.queue == '_TestWorker'
+    assert w.name == '_TestWorker'
+    assert w.xq_queue == '_TestWorker.XQ'
+    assert w.dq_queue == '_TestWorker.DQ'
 
     assert w.channel.exchange_declare.called is True
     assert w.channel.queue_declare.call_count == 3
@@ -38,7 +34,7 @@ def test_init(connection):
 
 
 def test_perform(connection):
-    w = _create_worker(connection=connection)
+    w = _TestWorker(connection=connection)
     payload = {'hello': 1}
     bytes_payload = json.dumps(payload)
     w._perform(
@@ -51,8 +47,8 @@ def test_perform(connection):
     assert w.channel.basic_ack.called is True
 
 
-def test_perform(connection):
-    w = TestWorkerError(connection=connection)
+def test_perform_error(connection):
+    w = _TestWorkerError(connection=connection)
     payload = {'hello': 1}
     bytes_payload = json.dumps(payload)
 

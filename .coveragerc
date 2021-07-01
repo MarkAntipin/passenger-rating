@@ -1,0 +1,5 @@
+[run]
+source=
+    app,my_rabbit,core
+omit=
+    .venv/*,tests
