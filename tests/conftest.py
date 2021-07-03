@@ -22,7 +22,9 @@ def get_db_conn_mock():
 
 @pytest.fixture()
 def db_connection(tables):
-    return get_db_conn_mock()
+    connection = engine.connect()
+    yield connection
+    connection.close()
 
 
 @pytest.fixture()
