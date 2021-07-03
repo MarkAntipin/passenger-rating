@@ -86,5 +86,36 @@
 * workers: обработчики для ребита
 
 Запускать:
-* приложение: poetry run uvicorn run:app --host 0.0.0.0 --port 8080
-* воркер: poetry run run_worker.py
+* приложение: 
+```
+poetry run uvicorn run:app --host 0.0.0.0 --port 8080
+ ```
+* воркер:
+```
+poetry run run_worker.py
+```
+
+
+## Тесты:
+Тесты находятся в папке tests
+* handlers - тесты ручек
+* workers тесты воркера
+* my_rabbit - тесты фреймворка для ребита
+
+
+* Настроить окружение:
+```
+poetry install
+```
+* Линтеры
+```
+poetry run flake8 .
+```
+* Тесты
+```
+poetry run coverage run -m pytest -v tests
+```
+* Покрытие тестами
+```
+poetry run coverage report -m 
+```

@@ -19,8 +19,8 @@ class _TestWorkerError(Worker):
         raise Exception('error')
 
 
-def test_init(connection):
-    w = _TestWorker(connection=connection)
+def test_init(rabbit_connection):
+    w = _TestWorker(connection=rabbit_connection)
 
     assert w.queue == '_TestWorker'
     assert w.name == '_TestWorker'
@@ -33,8 +33,8 @@ def test_init(connection):
     assert w.channel.basic_qos.called is True
 
 
-def test_perform(connection):
-    w = _TestWorker(connection=connection)
+def test_perform(rabbit_connection):
+    w = _TestWorker(connection=rabbit_connection)
     payload = {'hello': 1}
     bytes_payload = json.dumps(payload)
     w._perform(
@@ -47,8 +47,8 @@ def test_perform(connection):
     assert w.channel.basic_ack.called is True
 
 
-def test_perform_error(connection):
-    w = _TestWorkerError(connection=connection)
+def test_perform_error(rabbit_connection):
+    w = _TestWorkerError(connection=rabbit_connection)
     payload = {'hello': 1}
     bytes_payload = json.dumps(payload)
 

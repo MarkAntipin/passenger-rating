@@ -1,6 +1,12 @@
+from pathlib import Path
+
+import dotenv
 from pydantic import BaseSettings, PostgresDsn
 
 from my_rabbit import RabbitConfig, set_config
+
+
+BASE_DIR = Path(__file__).resolve().parent
 
 
 class Settings(BaseSettings):
@@ -37,7 +43,8 @@ class Settings(BaseSettings):
         )
 
     class Config:
-        env_file = '.env'
+        env_file = Path(BASE_DIR, '.env')
+        dotenv.load_dotenv(env_file)
 
 
 settings = Settings()

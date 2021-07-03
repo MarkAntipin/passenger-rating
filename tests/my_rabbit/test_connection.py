@@ -5,11 +5,11 @@ from my_rabbit.connection import (
 from my_rabbit.connection import _CONNECTIONS
 
 
-def test_get_connection(connection):
+def test_get_connection(rabbit_connection):
     assert len(_CONNECTIONS[ConnectionSyncType.SYNC]) == 1
 
 
-def test_pop_connection(connection):
+def test_pop_connection(rabbit_connection):
     pop_connection(
         conn_type=ConnectionType.PUBLISHER,
         sync_con_type=ConnectionSyncType.SYNC

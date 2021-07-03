@@ -33,10 +33,10 @@ def test_from_bytes():
     assert 'current_retries' in m.properties
 
 
-def test_publish(connection):
+def test_publish(rabbit_connection):
     m = _create_message()
     queue = 'test'
-    with connection.channel() as channel:
+    with rabbit_connection.channel() as channel:
         m.publish(channel=channel, queue=queue)
 
     assert channel.basic_publish.called is True
@@ -44,11 +44,11 @@ def test_publish(connection):
     assert channel.basic_publish.call_args.kwargs['body'] == m.message_body
 
 
-def test_drop(connection):
+def test_drop(rabbit_connection):
     m = _create_message()
     xq_queue = 'test.xq'
     traceback = 'error'
-    with connection.channel() as channel:
+    with rabbit_connection.channel() as channel:
         m.drop(channel=channel, xq_queue=xq_queue, traceback=traceback)
 
     assert channel.basic_publish.called is True
@@ -57,19 +57,19 @@ def test_drop(connection):
     assert m.traceback == traceback
 
 
-def test_ack(connection):
+def test_ack(rabbit_connection):
     m = _create_message()
-    with connection.channel() as channel:
+    with rabbit_connection.channel() as channel:
         m.ack(channel=channel)
 
     assert channel.basic_ack.called is True
 
 
-def test_requeue(connection):
+def test_requeue(rabbit_connection):
     m = _create_message()
     xq_queue = 'test.xq'
     dq_queue = 'test.dq'
-    with connection.channel() as channel:
+    with rabbit_connection.channel() as channel:
         for i in range(1, m.max_retries):
             m.requeue(channel=channel, xq_queue=xq_queue, dq_queue=dq_queue)
             assert m.current_retries == i
